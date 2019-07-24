@@ -8,17 +8,15 @@ from flask import Flask, request
 # Flask wants to know this to know what any imported things are relative to.
 app = Flask(__name__)
 
-AWESOMENESS = [
-    'awesome', 'terrific', 'fantastic', 'neato', 'fantabulous', 'wowza',
-    'oh-so-not-meh', 'brilliant', 'ducky', 'coolio', 'incredible',
-    'wonderful', 'smashing', 'lovely']
+INSULT = [
+    'boring', 'lazy', 'plain', 'mean']
 
 
 @app.route("/")
 def start_here():
     """Home page."""
     
-    return "<!doctype html><html>Hi! This is the home page. <br><a href=/hello>Go to Hello page</a></html>"
+    return "<!doctype html><html>Hi! This is the home page.<br><a href=/hello>Go to Hello page</a><br><a href=/byebye>Go to Bye page</a></html>"
 
 
 @app.route("/hello")
@@ -57,10 +55,6 @@ def greet_person():
     player = request.args.get("person")
     compliment = request.args.get("compliment")
 
-    # compliment = choice(AWESOMENESS)
-
-    # y = x
-
     return """
     <!doctype html>
     <html>
@@ -72,6 +66,45 @@ def greet_person():
       </body>
     </html>
     """.format(player, compliment)
+
+@app.route("/byebye")
+def say_bye():
+    """Say hello and prompt for user's name."""
+    
+    return """
+    <!doctype html>
+    <html>
+      <head>
+        <title>Bye There!</title>
+      </head>
+      <body>
+        <h1>Bye There!</h1>
+        <form action="/diss">
+          What's your name? <input type="text" name="person">
+          <br>
+          <input type="submit" value="Submit">
+        </form>
+      </body>
+    </html>
+    """
+@app.route("/diss")
+def diss_person():
+  """insult person"""
+  insult = choice(INSULT)
+  player = request.args.get("person")
+
+  return """
+    <!doctype html>
+    <html>
+      <head>
+        <title>A Compliment</title>
+      </head>
+      <body>
+        Hi, {}! I think you're {}!
+      </body>
+    </html>
+    """.format(player, insult)
+
 
 
 if __name__ == "__main__":
